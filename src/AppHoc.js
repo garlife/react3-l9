@@ -1,7 +1,14 @@
 import React from 'react';
 
+
+
 const withAuthUser = (Comp) => {
   class WrapperComp extends React.PureComponent {
+    constructor(props){
+      super(props);
+      console.log("constructor", "WrapperComp");
+    }
+
     render() {
       if (!this.props.isAuth) {
         return <div>Something went Wrong!</div>
@@ -69,6 +76,8 @@ function AppHoc(props) {
         {/* <User {...props} />
         <Admin {...props} />
         <SuperUser {...props} /> */}
+        {withAuthUser(User)(props)}
+        {withAuthUser(User)(props)}
         {withAuthUser(User)(props)}
       </div>
     </div>
