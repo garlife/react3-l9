@@ -1,121 +1,40 @@
-import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import Select from "react-select"
+import React, { useState } from 'react';
+import { BrowserRouter, Link, Route, Routes, Redirect, Navigate, useParams } from 'react-router-dom';
 
-const user = {
-  firstName: "",
-  secondName: "",
-  age: 0,
-  isFemale: "",
-  favouriteFruit: "",
-};
+const HomePage = (props) => {
+    return (<div>HomePage</div>);
+}
 
-function App() {
-  const [person, setPerson] = useState(user);
+const AboutPage = (props) => {
+    const { id } = useParams()
+    return (<div>AboutPage {id}</div>);
+}
 
-  const {
-    register,
-    watch,
-    formState: { errors },
-    handleSubmit,
-    control
-  } = useForm({
-    defaultValues: {
-      firstName: "Ann",
-    },
-  }); //!!!
+const App = (props) => {
+    return (
+        <BrowserRouter>
+            <div>
+                <nav>
+                    <ul>
+                        <li><Link to="/">Home</Link></li>
+                        <li><Link to="/about">About</Link></li>
+                        <li><Link to="/about/34">About 34</Link></li>
+                        <li><Link to="/other">Other</Link></li>
+                        <li><Link to="/asdasdas">aa</Link></li>                        
+                    </ul>
+                </nav>
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    //setPerson(e.target.value);
-    console.log(e);
-  };
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/other" element={<Navigate to="/" replace />} />
+                    <Route path="*" element={<Navigate to="/about" replace />} />
+                    <Route path="/about/:id" element={<AboutPage /> } />
+                </Routes>
+            </div>
+        </BrowserRouter>
+    )
 
-  function handleChange(event) {
-    const { name, value } = event.target;
-    const newPerson = { ...person };
-    newPerson[name] = value;
-    setPerson(newPerson);
-  }
-
-  console.log(
-    watch("firstName"),
-    watch("secondName"),
-    watch("age"),
-    watch("isFemale"),
-    watch("favouriteFruit"),
-    errors
-  );
-
-  return (
-    <div className="App">
-      <h1></h1>
-
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>
-          Name
-          <input
-            type="text"
-            {...register("firstName", {
-              required: true,
-              pattern: /^[А-Я][а-я]+$/i,
-            })}
-          />
-          {errors.firstName && (
-            <span> This field is required/pattern violation </span>
-          )}
-        </label>
-        <label>
-          Surname
-          <input
-            type="text"
-            {...register("secondName", { required: true, maxLength: 31 })}
-          ></input>
-          {errors.secondName && <span> This field is required! </span>}
-        </label>
-        <label>
-          Age
-          <input
-            type="number"
-            {...register("age", { min: 5, max: 100 })}
-          ></input>
-          {errors.number && <span>min/max err</span>}
-        </label>
-        <label>
-          Female
-          <input
-            type="checkbox"
-            {...register("isFemale", { required: true })}
-          ></input>
-        </label>
-        <label>
-          любимый фрукт:
-          {/* <select {...register("favouriteFruit")}>
-            <option value="grapefruit">Грейпфрут</option>
-            <option value="lime">Лайм</option>
-
-            <option value="mango">Манго</option>
-          </select> */}
-          <Controller
-            name="favouriteFruit"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                options={[
-                  { value: "lime", label: "lime" },
-                  { value: "strawberry", label: "Strawberry" },
-                  { value: "vanilla", label: "Vanilla" },
-                ]}
-              />
-            )}
-          />
-        </label>
-
-        <input type="submit" value="Save to model"></input>
-      </form>
-    </div>
-  );
 }
 
 export default App;
