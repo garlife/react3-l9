@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import AppHoc from "./AppHoc";
 
-import App from "./App";
-
-ReactDOM.render(<App name="text name" isAuth/>, document.getElementById("root"));
+ReactDOM.render(<AppHoc name="text name" isAuth/>, document.getElementById("root"));
