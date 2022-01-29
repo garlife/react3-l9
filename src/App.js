@@ -1,55 +1,78 @@
 import React from 'react';
-import './style.css';
 
-function withAuthUser(Comp) {
-  const WrapperComp = (props) => {
-    if (!props.isAuth) {
-      return <p>Smth wrong!</p>;
+const withAuthUser = (Comp) => {
+  class WrapperComp extends React.PureComponent {
+    render() {
+      if (!this.props.isAuth) {
+        return <div>Something went Wrong!</div>
+      }
+      return (
+        <div>
+          <div>It's WrapperComp!</div>
+          <Comp name={this.props.name} />
+        </div >
+      )
     }
-    return (
-      <>
-        <div>Our brand new WRAPPER!</div>
-        <Comp name={props.name} />
-      </>
-    );
-  };
-  return WrapperComp;
+  }
+
+  const withWrapperComp2 = (Comp2) => {
+    return (props) => <>
+      <div>It's WrapperComp2!</div>
+      <Comp {...props} />
+      <WrapperComp {...props} />
+      <Comp2 {...props} />
+    </>
+  }
+
+  // return (props) => <WrapperComp {...props}/>;
+  return withWrapperComp2(WrapperComp)
 }
 
-function User({ name }) {
+const User = ({ name }) => {
   return (
-    <div>
+    <div className="App">
       <h1>{name}</h1>
-      <p>Congrats, user</p>
+      <div>It's User</div>
+      <p>Great! You are user now</p>
     </div>
-  );
+  )
 }
 
-function Admin({ name }) {
+
+const Admin = ({ name }) => {
   return (
-    <div>
+    <div className="App">
       <h1>{name}</h1>
-      <p>Congrats, Admin!</p>
+      <div>It's Admin</div>
+      <p>Congrats, Administrator!</p>
     </div>
-  );
+  )
 }
 
-function SuperUser({ name }) {
+const SuperUser = ({ name }) => {
   return (
-    <div>
+    <div className="App">
       <h1>{name}</h1>
-      <p>Congrats, you are SuperUser!</p>
+      <div>It's SuperUser</div>
+      <p>Congrats, Super User!</p>
+    </div>
+  )
+}
+
+function App(props) {
+  return (
+    <div className="App">
+      <header className="App-header">
+        Lesson 9
+      </header>
+      <div id="content">
+        {/* <User {...props} />
+        <Admin {...props} />
+        <SuperUser {...props} /> */}
+        {withAuthUser(User)(props)}
+      </div>
     </div>
   );
 }
 
-export default function App(props) {
-  return (
-    <div>
-      {/* <User name={...props} />
-      <SuperUser name={...props} />
-      <Admin name={...props} /> */}
-      {withAuthUser(User)(props)}
-    </div>
-  );
-}
+export default App;
