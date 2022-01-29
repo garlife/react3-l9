@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 
 
 
@@ -32,7 +32,7 @@ const withAuthUser = (Comp) => {
   }
 
   // return (props) => <WrapperComp {...props}/>;
-  return withWrapperComp2(WrapperComp)
+  return memo(withWrapperComp2)(WrapperComp)
 }
 
 const User = ({ name }) => {
@@ -76,7 +76,6 @@ function AppHoc(props) {
         {/* <User {...props} />
         <Admin {...props} />
         <SuperUser {...props} /> */}
-        {withAuthUser(User)(props)}
         {withAuthUser(User)(props)}
         {withAuthUser(User)(props)}
       </div>
