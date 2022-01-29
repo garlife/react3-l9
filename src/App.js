@@ -1,72 +1,62 @@
-import React, { Children, useContext, useState } from 'react';
+import React, { useState } from 'react';
 
-const MyContext = React.createContext();
+export default function App() {
+  const [person, setPerson] = useState({
+    firstName: 'David',
+    secondName: 'Fisherman',
+    isFemale: false,
+    age: 0,
+    favouriteFruit: ''
+  });
 
-const Text = ({ title }) => {
+  console.log('App', person);
 
-    return (
-        <div>
-            {title}
-        </div>
-    )
+  function handlerPerson(event) {
+    setPerson(event.target.value);
+  }
+
+  function handlerChange(event) {
+    const { name, value } = event.target;
+    const newPerson = {...person};
+    newPerson[name] = value;
+    setPerson(newPerson);
+  }
+
+  return (
+    <>
+      <form onSubmit={handlerPerson}>
+        <label>firstName</label>
+        <input type="text"
+          name="firstName"
+          value={person.firstName}
+          onChange={handlerChange}
+        />
+        <br />
+        <label>secondName</label>
+        <input type="text"
+          name="secondName"
+          value={person.secondName}
+          onChange={handlerChange}
+        />
+        <br />
+        <label>Age</label>
+        <input type="text" name="age" value={person.age} onChange={handlerChange} />
+        <br />
+        <label>isFemale</label>
+        <input type="checkbox" name="isFemale" value={person.isFemale} onChange={handlerChange} />
+        <br />
+        <label>
+          любимый фрукт:
+          <select value={person.value} onChange={handlerChange}>
+            <option value="grapefruit">Грейпфрут</option>
+            <option value="lime">Лайм</option>
+            
+            <option value="mango">Манго</option>
+          </select>
+        </label>
+        <br />
+        <input type="submit" value="Save to model" />
+      </form>
+    </>
+  );
 }
-
-const BlockTextConsumer = ({ title, borderStyle }) => {
-    return (
-        <MyContext.Consumer>
-            {(value) =>
-                <div style={{ borderStyle: value.borderStyle }}>
-                    <Text title={title} />
-                </div>}
-        </MyContext.Consumer>
-    )
-}
-
-const WrapperBlockText = (props) => {
-    return (
-        <>
-            <BlockTextHook {...props} />
-            <BlockTextClass {...props} />
-            <BlockTextConsumer {...props} />
-        </>        
-    )
-}
-
-class BlockTextClass extends React.Component {
-    static contextType = MyContext
-
-    render() {
-        return (
-            <div style={{ borderStyle: this.context.borderStyle }}>
-                <Text title={this.props.title} />
-            </div>
-        )
-    }
-}
-
-const BlockTextHook = ({title}) => {
-    const value = useContext(MyContext);
-
-    return (
-        <div style={{ borderStyle: value.borderStyle }}>
-            <Text title={title} />
-        </div>
-    )
-}
-
-const borderStyle = 'none'
-
-
-const AppCon = () => {
-    const [contextValue, setContextValue] = useState({borderStyle: 'solid'});
-    
-    return (
-        <div>
-            <MyContext.Provider value={contextValue} >
-                <WrapperBlockText title={'Text title'} borderStyle={borderStyle} />
-            </MyContext.Provider>
-        </div>
-    );
-}
-
-export default AppCon;
